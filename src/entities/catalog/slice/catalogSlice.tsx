@@ -65,7 +65,7 @@ export const fetchProducts = (page: number, limit: number, category: string) => 
         const products = await fetchProductsFromAPI(page, limit, category);
         dispatch(setProducts(products));
     } catch (error) {
-        dispatch(setError(error.message));
+        dispatch(setError('error'));
     }
     dispatch(setLoading(false));
 };
