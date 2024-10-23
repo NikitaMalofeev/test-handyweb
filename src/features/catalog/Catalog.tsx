@@ -2,9 +2,11 @@ import { useEffect, useState } from 'react';
 import { RootState, useAppDispatch, useAppSelector } from '@/app/store/store';
 import { fetchProducts, setCategory, setSortOrder, incrementPage, setProducts } from '@/entities/catalog/slice/catalogSlice';
 import styles from './catalog.module.scss';
+import { useRouter } from 'next/router';
 
 export const Catalog = () => {
     const dispatch = useAppDispatch();
+    const router = useRouter();
     const { products, isLoading, sortOrder, error, hasMore, page, selectedCategory } = useAppSelector((state: RootState) => state.catalog);
 
     const limit = 6;
@@ -19,9 +21,9 @@ export const Catalog = () => {
         dispatch(fetchProducts(1, limit, category));
     };
 
-    useEffect(() => {
-        dispatch(fetchProducts(1, limit, selectedCategory || ''));
-    }, [dispatch, selectedCategory]);
+    const handleProductClick = (id: number) => {
+        router.push(`/product/${id}`); 
+    };
 
     const sortedProducts = [...products].sort((a, b) => {
         if (sortOrder === 'asc') {
@@ -32,15 +34,8 @@ export const Catalog = () => {
     });
 
     useEffect(() => {
-        const handleScroll = () => {
-            if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 500 && !isLoading && hasMore) {
-                dispatch(incrementPage());
-                dispatch(fetchProducts(page + 1, limit, selectedCategory || ''));
-            }
-        };
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, [isLoading, hasMore, dispatch, page, selectedCategory]);
+        dispatch(fetchProducts(1, limit, selectedCategory || ''));
+    }, [dispatch, selectedCategory]);
 
     if (error) {
         return <div>Error: {error}</div>;
@@ -68,7 +63,11 @@ export const Catalog = () => {
 
             <div className={styles.products}>
                 {sortedProducts.map((product, index) => (
-                    <div key={`${product.id}-${page}-${index}`} className={styles.products__card}>
+                    <div
+                        key={`${product.id}-${page}-${index}`}
+                        className={styles.products__card}
+                        onClick={() => handleProductClick(product.id)}
+                    >
                         <img src={product.image} alt={product.title} width={100} />
                         <h3>{product.title}</h3>
                         <p>Price: ${product.price}</p>
@@ -81,4 +80,5 @@ export const Catalog = () => {
         </div>
     );
 };
+
 
