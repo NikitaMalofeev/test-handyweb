@@ -10,6 +10,7 @@ import { Button, Select } from 'antd';
 const { Option } = Select;
 import { catalogSelectOptions } from '@/shared/config/catalogSelectOptions';
 import { Loader } from '@/shared/ui/Loader/Loader';
+import Image from 'next/image';
 
 export const Catalog = () => {
     const dispatch = useAppDispatch();
@@ -127,7 +128,7 @@ export const Catalog = () => {
                         className={styles.products__card}
                         onClick={() => handleProductClick(product.id)}
                     >
-                        <img src={product.image} alt={product.title} width={100} />
+                        <Image src={product.image} alt={product.title} width={100} />
                         <h3>{product.title}</h3>
                         <p>Price: ${product.price}</p>
                         {favoriteIds.includes(product.id) ? (

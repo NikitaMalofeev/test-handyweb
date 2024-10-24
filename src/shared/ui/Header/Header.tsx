@@ -9,6 +9,7 @@ import styles from './styles.module.scss';
 import { searchDebounce } from '@/shared/helpers/searchDebounce';
 import HeartOutlined from '@ant-design/icons/lib/icons/HeartOutlined';
 import ArrowLeftOutlined from '@ant-design/icons/lib/icons/ArrowLeftOutlined';
+import Image from 'next/image';
 
 const { Search } = Input;
 
@@ -102,7 +103,7 @@ export const Header = () => {
                                     className={styles.search__result__item}
                                     onClick={() => handleProductClick(product.id)}
                                 >
-                                    <img src={product.image} alt={product.title} width={50} />
+                                    <Image src={product.image} alt={product.title} width={50} />
                                     <span>{product.title}</span>
                                 </div>
                             ))

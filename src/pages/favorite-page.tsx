@@ -7,6 +7,7 @@ import { removeFavorite } from '@/entities/favorite/slice/favoriteSlice';
 import HeartFilled from '@ant-design/icons/lib/icons/HeartFilled';
 import HeartOutlined from '@ant-design/icons/lib/icons/HeartOutlined';
 import { Loader } from '@/shared/ui/Loader/Loader';
+import Image from 'next/image';
 
 const FavoritesPage = () => {
     const dispatch = useAppDispatch();
@@ -50,7 +51,7 @@ const FavoritesPage = () => {
             <div>
                 {favoriteProducts.map(product => (
                     <div key={product.id} style={{ marginBottom: '20px', textAlign: 'center' }}>
-                        <img src={product.image} alt={product.title} width={100} />
+                        <Image src={product.image} alt={product.title} width={100} />
                         <h3>{product.title}</h3>
                         <p>Price: ${product.price}</p>
                         <p>Rating: {product.rating?.rate} / 5 ({product.rating?.count} reviews)</p>
