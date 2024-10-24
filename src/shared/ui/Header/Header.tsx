@@ -103,7 +103,7 @@ export const Header = () => {
                                     className={styles.search__result__item}
                                     onClick={() => handleProductClick(product.id)}
                                 >
-                                    <Image src={product.image} alt={product.title} width={50} />
+                                    <Image src={product.image} alt={product.title} width={50} height={50} />
                                     <span>{product.title}</span>
                                 </div>
                             ))

@@ -128,7 +128,7 @@ export const Catalog = () => {
                         className={styles.products__card}
                         onClick={() => handleProductClick(product.id)}
                     >
-                        <Image src={product.image} alt={product.title} width={100} />
+                        <Image src={product.image} alt={product.title} width={200} height={200} />
                         <h3>{product.title}</h3>
                         <p>Price: ${product.price}</p>
                         {favoriteIds.includes(product.id) ? (

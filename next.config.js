@@ -1,4 +1,7 @@
 module.exports = {
+    images: {
+        domains: ['fakestoreapi.com'],
+    },
     async redirects() {
         return [
             {
@@ -8,5 +11,4 @@ module.exports = {
             },
         ];
     },
-
 };

@@ -51,7 +51,7 @@ const FavoritesPage = () => {
             <div>
                 {favoriteProducts.map(product => (
                     <div key={product.id} style={{ marginBottom: '20px', textAlign: 'center' }}>
-                        <Image src={product.image} alt={product.title} width={100} />
+                        <Image src={product.image} alt={product.title} width={200} height={200} />
                         <h3>{product.title}</h3>
                         <p>Price: ${product.price}</p>
                         <p>Rating: {product.rating?.rate} / 5 ({product.rating?.count} reviews)</p>
