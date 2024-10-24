@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { IProduct } from '@/entities/product/models/productTypes';
 import { fetchProductById } from '@/entities/product/api/fetchProductById';
+import { Flex } from 'antd';
 
 const ProductDetail = () => {
     const router = useRouter();
@@ -39,12 +40,14 @@ const ProductDetail = () => {
     }
 
     return (
-        <div>
-            <h1>{product.title}</h1>
-            <img src={product.image} alt={product.title} width={200} />
-            <p>{product.description}</p>
-            <p>Price: ${product.price}</p>
-            <p>Rating: {product.rating?.rate} / 5 ({product.rating?.count} reviews)</p>
+        <div style={{ backgroundColor: '#d1feff', height: '100%' }}>
+            <Flex vertical align='center'>
+                <h1>{product.title}</h1>
+                <img src={product.image} alt={product.title} width={200} />
+                <p>{product.description}</p>
+                <p>Price: ${product.price}</p>
+                <p>Rating: {product.rating?.rate} / 5 ({product.rating?.count} reviews)</p>
+            </Flex>
         </div>
     );
 };

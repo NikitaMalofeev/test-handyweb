@@ -1,13 +1,26 @@
-.product-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 16px;
-  }
-  
-  .product-card {
-    border: 1px solid #ccc;
+.catalog {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+}
+
+.sort__buttons {
+  display: flex;
+  gap: 15px;
+}
+
+.products__card {
+  border: 1px solid #ccc;
     padding: 16px;
     text-align: center;
+    max-width: 500px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #d1feff;
+    }
     img {
       margin-bottom: 12px;
     }
@@ -19,5 +32,11 @@
       font-size: 16px;
       color: #555;
     }
+}
+
+.product-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
   }
   

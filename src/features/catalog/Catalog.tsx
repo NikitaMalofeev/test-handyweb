@@ -6,6 +6,9 @@ import { useRouter } from 'next/router';
 import { addFavorite, removeFavorite } from '@/entities/favorite/slice/favoriteSlice';
 import HeartFilled from '@ant-design/icons/lib/icons/HeartFilled';
 import HeartOutlined from '@ant-design/icons/lib/icons/HeartOutlined';
+import { Button, Select } from 'antd';
+const { Option } = Select;
+import { catalogSelectOptions } from '@/shared/config/catalogSelectOptions';
 
 export const Catalog = () => {
     const dispatch = useAppDispatch();
@@ -19,10 +22,9 @@ export const Catalog = () => {
         dispatch(setSortOrder(order));
     };
 
-    const handleCategoryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        const category = event.target.value;
-        dispatch(setCategory(category));
-        dispatch(fetchProducts(1, limit, category));
+    const handleCategoryChange = (value: string) => {
+        dispatch(setCategory(value));
+        dispatch(fetchProducts(1, limit, value));
     };
 
     const handleToggleFavorite = (id: number, event: React.MouseEvent) => {
@@ -69,23 +71,28 @@ export const Catalog = () => {
     }
 
     return (
-        <div>
+        <div className={styles.catalog}>
             <h1>Catalog</h1>
 
-            <div className={styles.sortButtons}>
-                <button onClick={() => handleSort('asc')}>Sort by Price: Low to High</button>
-                <button onClick={() => handleSort('desc')}>Sort by Price: High to Low</button>
+            <div className={styles.sort__buttons}>
+                <Button type={sortOrder === 'asc' ? 'primary' : 'default'} onClick={() => handleSort('asc')}>Sort by Price: Low to High</Button>
+                <Button type={sortOrder === 'desc' ? 'primary' : 'default'} onClick={() => handleSort('desc')}>Sort by Price: High to Low</Button>
             </div>
 
             <div className={styles.filter}>
                 <label htmlFor="category">Filter by Category:</label>
-                <select id="category" onChange={handleCategoryChange} value={selectedCategory || ''}>
-                    <option value="">All Categories</option>
-                    <option value="men's clothing">Men's Clothing</option>
-                    <option value="women's clothing">Women's Clothing</option>
-                    <option value="jewelery">Jewelery</option>
-                    <option value="electronics">Electronics</option>
-                </select>
+                <Select
+                    id="category"
+                    style={{ width: 200 }}
+                    value={selectedCategory || ''}
+                    onChange={handleCategoryChange}
+                >
+                    {catalogSelectOptions.map((option) => (
+                        <Option key={option.value} value={option.value}>
+                            {option.label}
+                        </Option>
+                    ))}
+                </Select>
             </div>
 
             <div className={styles.products}>
@@ -94,6 +101,7 @@ export const Catalog = () => {
                         key={`${product.id}-${page}-${index}`}
                         className={styles.products__card}
                         onClick={() => handleProductClick(product.id)}
+
                     >
                         <img src={product.image} alt={product.title} width={100} />
                         <h3>{product.title}</h3>
@@ -113,7 +121,7 @@ export const Catalog = () => {
             </div>
 
             {isLoading && <div>Loading...</div>}
-            {!hasMore && <div>No more products</div>}
-        </div>
+            {(!hasMore && !isLoading) && <div style={{ margin: '20px' }}>No more products</div>}
+        </div >
     );
 };

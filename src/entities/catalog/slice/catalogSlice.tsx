@@ -4,6 +4,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface CatalogState {
     products: IProduct[];
+    searchingProducts: IProduct[];
     isLoading: boolean;
     error: string | null;
     sortOrder: 'asc' | 'desc';
@@ -14,6 +15,7 @@ interface CatalogState {
 
 const initialState: CatalogState = {
     products: [],
+    searchingProducts: [],
     isLoading: false,
     error: null,
     sortOrder: 'asc',
@@ -42,6 +44,10 @@ const catalogSlice = createSlice({
             state.hasMore = action.payload.length > 0;
             state.isLoading = false;
         },
+        setSearchingProducts: (state, action: PayloadAction<IProduct[]>) => {
+            state.searchingProducts = action.payload; // Set products for search results
+            state.isLoading = false;
+        },
         setError: (state, action: PayloadAction<string | null>) => {
             state.error = action.payload;
         },
@@ -51,7 +57,7 @@ const catalogSlice = createSlice({
     },
 });
 
-export const { setSortOrder, setCategory, setLoading, setProducts, setError, incrementPage } = catalogSlice.actions;
+export const { setSortOrder, setSearchingProducts, setCategory, setLoading, setProducts, setError, incrementPage } = catalogSlice.actions;
 export default catalogSlice.reducer;
 
 export const fetchProducts = (page: number, limit: number, category: string) => async (dispatch: any, getState: any) => {
@@ -66,6 +72,20 @@ export const fetchProducts = (page: number, limit: number, category: string) => 
             )
         );
         dispatch(setProducts(newProducts));
+    } catch (error) {
+        dispatch(setError('Failed to fetch products'));
+    }
+    dispatch(setLoading(false));
+};
+
+export const fetchSearchProducts = (searchQuery: string) => async (dispatch: any) => {
+    dispatch(setLoading(true));
+    try {
+        const products = await fetchProductsFromAPI(1, 30, '');
+        const filteredProducts = products.filter((product: IProduct) =>
+            product.title.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+        dispatch(setSearchingProducts(filteredProducts));
     } catch (error) {
         dispatch(setError('Failed to fetch products'));
     }
