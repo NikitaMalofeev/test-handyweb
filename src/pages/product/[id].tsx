@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { IProduct } from '@/entities/product/models/productTypes';
 import { fetchProductById } from '@/entities/product/api/fetchProductById';
 import { Flex } from 'antd';
+import { Loader } from '@/shared/ui/Loader/Loader';
 
 const ProductDetail = () => {
     const router = useRouter();
@@ -28,7 +29,7 @@ const ProductDetail = () => {
     }, [id]);
 
     if (isLoading) {
-        return <div>Loading...</div>;
+        return <Loader />;
     }
 
     if (error) {

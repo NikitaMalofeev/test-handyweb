@@ -9,6 +9,7 @@ import HeartOutlined from '@ant-design/icons/lib/icons/HeartOutlined';
 import { Button, Select } from 'antd';
 const { Option } = Select;
 import { catalogSelectOptions } from '@/shared/config/catalogSelectOptions';
+import { Loader } from '@/shared/ui/Loader/Loader';
 
 export const Catalog = () => {
     const dispatch = useAppDispatch();
@@ -120,7 +121,7 @@ export const Catalog = () => {
                 ))}
             </div>
 
-            {isLoading && <div>Loading...</div>}
+            {isLoading && <Loader />}
             {(!hasMore && !isLoading) && <div style={{ margin: '20px' }}>No more products</div>}
         </div >
     );

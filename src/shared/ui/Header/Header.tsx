@@ -74,14 +74,15 @@ export const Header = () => {
             />
 
             {isNoFavoritePage ? (
-                <Link href="/" style={{ textDecoration: 'none', color: 'black', display: 'flex', gap: '8px' }}>
-                    <ArrowLeftOutlined />
-                    <span>Back to Catalog</span>
-                </Link>
-            ) : (
                 <Link href="/favorite-page" style={{ textDecoration: 'none', color: 'black', display: 'flex', gap: '8px' }}>
                     <span>Favorites</span>
                     <HeartOutlined />
+                </Link>
+            ) : (
+
+                <Link href="/" style={{ textDecoration: 'none', color: 'black', display: 'flex', gap: '8px' }}>
+                    <ArrowLeftOutlined />
+                    <span>Back to Catalog</span>
                 </Link>
             )}
 

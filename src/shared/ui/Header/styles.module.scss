@@ -29,9 +29,11 @@
     padding: 25px;
 }
 
-.search__result__Item {
+.search__result__item {
     display: flex;
     align-items: center;
+    align-items: center;
+    gap: 4px;
     padding: 10px;
     border-bottom: 1px solid #f0f0f0;
     cursor: pointer;
