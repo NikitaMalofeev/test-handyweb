@@ -17,7 +17,7 @@ const FavoritesPage = () => {
 
     useEffect(() => {
         const loadFavoriteProducts = async () => {
-            const products = await Promise.all(favoriteIds.map((id: string | number) => fetchProductById(id)));
+            const products = await Promise.all(favoriteIds.map((id: string | number) => fetchProductById(String(id))));
             setFavoriteProducts(products);
             setIsLoading(false);
         };
