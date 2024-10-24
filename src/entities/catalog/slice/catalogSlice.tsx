@@ -40,8 +40,12 @@ const catalogSlice = createSlice({
             state.isLoading = action.payload;
         },
         setProducts: (state, action: PayloadAction<IProduct[]>) => {
-            state.products = [...state.products, ...action.payload];
-            state.hasMore = action.payload.length > 0;
+            if (Array.isArray(action.payload)) {
+                state.products = [...state.products, ...action.payload];
+                state.hasMore = action.payload.length > 0;
+            } else {
+                state.hasMore = false;
+            }
             state.isLoading = false;
         },
         setSearchingProducts: (state, action: PayloadAction<IProduct[]>) => {

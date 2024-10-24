@@ -73,4 +73,17 @@ const FavoritesPage = () => {
     );
 };
 
+// здесь можно было бы применить ssr если бы я изменял бек из других частей приложения и заранее подгружать их с сервера 
+// export const getServerSideProps: GetServerSideProps = async (context) => {
+//     const favoriteIdsFromDB = [1, 2, 3];
+//     const favoriteProducts = await Promise.all(favoriteIds.map(id => fetchProductById(String(id))));
+
+//     return {
+//         props: {
+//             favoriteProducts,
+//         },
+//     };
+// };
+
+
 export default FavoritesPage;

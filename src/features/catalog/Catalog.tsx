@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { RootState, useAppDispatch, useAppSelector } from "@/app/store/store";
-import { fetchProducts, setCategory, setSortOrder, incrementPage } from "@/entities/catalog/slice/catalogSlice";
+import { fetchProducts, setProducts, setCategory, setSortOrder, incrementPage } from "@/entities/catalog/slice/catalogSlice";
 import styles from "./catalog.module.scss";
 import { useRouter } from "next/router";
 import { addFavorite, removeFavorite } from "@/entities/favorite/slice/favoriteSlice";
@@ -11,8 +11,11 @@ const { Option } = Select;
 import { catalogSelectOptions } from "@/shared/config/catalogSelectOptions";
 import { Loader } from "@/shared/ui/Loader/Loader";
 import Image from "next/image";
+import { GetStaticProps } from "next";
+import { fetchAllProducts } from "@/entities/product/api/fetchAllProducts";
+import { IProduct } from "@/entities/product/models/productTypes";
 
-export const Catalog = () => {
+export const Catalog = ({ initialProducts }: { initialProducts: IProduct[] }) => {
     const dispatch = useAppDispatch();
     const router = useRouter();
     const { products, isLoading, sortOrder, error, hasMore, page, selectedCategory } = useAppSelector((state: RootState) => state.catalog);
@@ -21,6 +24,10 @@ export const Catalog = () => {
     const limit = 6;
     const [scrollThreshold, setScrollThreshold] = useState<number>(1500);
     const [isFetching, setIsFetching] = useState(false);
+
+    useEffect(() => {
+        dispatch(setProducts(initialProducts));
+    }, [dispatch, initialProducts]);
 
     const handleSort = (order: "asc" | "desc") => {
         dispatch(setSortOrder(order));
@@ -53,8 +60,10 @@ export const Catalog = () => {
     });
 
     useEffect(() => {
-        dispatch(fetchProducts(1, limit, selectedCategory || ""));
-    }, [dispatch, selectedCategory]);
+        if (page === 1 && !products.length) {
+            dispatch(fetchProducts(1, limit, selectedCategory || ""));
+        }
+    }, [dispatch, selectedCategory, page, products]);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -150,3 +159,17 @@ export const Catalog = () => {
         </div>
     );
 };
+
+
+export const getStaticProps: GetStaticProps = async () => {
+    const products = await fetchAllProducts();
+
+    return {
+        props: {
+            initialProducts: products,
+        },
+        revalidate: 60,
+    };
+};
+
+export default Catalog;
