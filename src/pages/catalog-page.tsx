@@ -1,4 +1,4 @@
-import { Catalog } from '@/features/catalog/Catalog';
+import { Catalog } from "@/features/catalog/Catalog";
 
 const CatalogPage = () => {
 

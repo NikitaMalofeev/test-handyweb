@@ -1,13 +1,13 @@
-import { fetchProductsFromAPI } from '@/entities/product/api/fetchProductsFromAPI';
-import { IProduct } from '@/entities/product/models/productTypes';
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { fetchProductsFromAPI } from "@/entities/product/api/fetchProductsFromAPI";
+import { IProduct } from "@/entities/product/models/productTypes";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface CatalogState {
     products: IProduct[];
     searchingProducts: IProduct[];
     isLoading: boolean;
     error: string | null;
-    sortOrder: 'asc' | 'desc';
+    sortOrder: "asc" | "desc";
     selectedCategory: string;
     page: number;
     hasMore: boolean;
@@ -18,17 +18,17 @@ const initialState: CatalogState = {
     searchingProducts: [],
     isLoading: false,
     error: null,
-    sortOrder: 'asc',
-    selectedCategory: '',
+    sortOrder: "asc",
+    selectedCategory: "",
     page: 1,
     hasMore: true,
 };
 
 const catalogSlice = createSlice({
-    name: 'catalog',
+    name: "catalog",
     initialState,
     reducers: {
-        setSortOrder: (state, action: PayloadAction<'asc' | 'desc'>) => {
+        setSortOrder: (state, action: PayloadAction<"asc" | "desc">) => {
             state.sortOrder = action.payload;
         },
         setCategory: (state, action: PayloadAction<string>) => {
@@ -73,7 +73,7 @@ export const fetchProducts = (page: number, limit: number, category: string) => 
         );
         dispatch(setProducts(newProducts));
     } catch (error) {
-        dispatch(setError('Failed to fetch products'));
+        dispatch(setError("Failed to fetch products"));
     }
     dispatch(setLoading(false));
 };
@@ -81,13 +81,13 @@ export const fetchProducts = (page: number, limit: number, category: string) => 
 export const fetchSearchProducts = (searchQuery: string) => async (dispatch: any) => {
     dispatch(setLoading(true));
     try {
-        const products = await fetchProductsFromAPI(1, 30, '');
+        const products = await fetchProductsFromAPI(1, 30, "");
         const filteredProducts = products.filter((product: IProduct) =>
             product.title.toLowerCase().includes(searchQuery.toLowerCase())
         );
         dispatch(setSearchingProducts(filteredProducts));
     } catch (error) {
-        dispatch(setError('Failed to fetch products'));
+        dispatch(setError("Failed to fetch products"));
     }
     dispatch(setLoading(false));
 };

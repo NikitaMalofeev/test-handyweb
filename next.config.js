@@ -1,12 +1,12 @@
 module.exports = {
     images: {
-        domains: ['fakestoreapi.com'],
+        domains: ["fakestoreapi.com"],
     },
     async redirects() {
         return [
             {
-                source: '/',
-                destination: '/catalog-page',
+                source: "/",
+                destination: "/catalog-page",
                 permanent: true,
             },
         ];

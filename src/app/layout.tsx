@@ -1,8 +1,8 @@
-import type { Metadata } from 'next'
+import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: 'Catalog Handlyweb',
-  description: 'test task',
+  title: "Catalog Handlyweb",
+  description: "test task",
 }
 
 export default function RootLayout({

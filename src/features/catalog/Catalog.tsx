@@ -1,16 +1,16 @@
-import { useEffect, useState } from 'react';
-import { RootState, useAppDispatch, useAppSelector } from '@/app/store/store';
-import { fetchProducts, setCategory, setSortOrder, incrementPage } from '@/entities/catalog/slice/catalogSlice';
-import styles from './catalog.module.scss';
-import { useRouter } from 'next/router';
-import { addFavorite, removeFavorite } from '@/entities/favorite/slice/favoriteSlice';
-import HeartFilled from '@ant-design/icons/lib/icons/HeartFilled';
-import HeartOutlined from '@ant-design/icons/lib/icons/HeartOutlined';
-import { Button, Select } from 'antd';
+import { useEffect, useState } from "react";
+import { RootState, useAppDispatch, useAppSelector } from "@/app/store/store";
+import { fetchProducts, setCategory, setSortOrder, incrementPage } from "@/entities/catalog/slice/catalogSlice";
+import styles from "./catalog.module.scss";
+import { useRouter } from "next/router";
+import { addFavorite, removeFavorite } from "@/entities/favorite/slice/favoriteSlice";
+import HeartFilled from "@ant-design/icons/lib/icons/HeartFilled";
+import HeartOutlined from "@ant-design/icons/lib/icons/HeartOutlined";
+import { Button, Select } from "antd";
 const { Option } = Select;
-import { catalogSelectOptions } from '@/shared/config/catalogSelectOptions';
-import { Loader } from '@/shared/ui/Loader/Loader';
-import Image from 'next/image';
+import { catalogSelectOptions } from "@/shared/config/catalogSelectOptions";
+import { Loader } from "@/shared/ui/Loader/Loader";
+import Image from "next/image";
 
 export const Catalog = () => {
     const dispatch = useAppDispatch();
@@ -22,7 +22,7 @@ export const Catalog = () => {
     const [scrollThreshold, setScrollThreshold] = useState<number>(1500);
     const [isFetching, setIsFetching] = useState(false);
 
-    const handleSort = (order: 'asc' | 'desc') => {
+    const handleSort = (order: "asc" | "desc") => {
         dispatch(setSortOrder(order));
     };
 
@@ -45,7 +45,7 @@ export const Catalog = () => {
     };
 
     const sortedProducts = [...products].sort((a, b) => {
-        if (sortOrder === 'asc') {
+        if (sortOrder === "asc") {
             return a.price - b.price;
         } else {
             return b.price - a.price;
@@ -53,7 +53,7 @@ export const Catalog = () => {
     });
 
     useEffect(() => {
-        dispatch(fetchProducts(1, limit, selectedCategory || ''));
+        dispatch(fetchProducts(1, limit, selectedCategory || ""));
     }, [dispatch, selectedCategory]);
 
     useEffect(() => {
@@ -69,7 +69,7 @@ export const Catalog = () => {
 
                 const nextPage = page + 1;
                 dispatch(incrementPage());
-                dispatch(fetchProducts(nextPage, limit, selectedCategory || '')).then(() => {
+                dispatch(fetchProducts(nextPage, limit, selectedCategory || "")).then(() => {
                     setIsFetching(false);
                 });
 
@@ -87,9 +87,9 @@ export const Catalog = () => {
 
         const debouncedScroll = debounceScroll();
 
-        window.addEventListener('scroll', debouncedScroll);
+        window.addEventListener("scroll", debouncedScroll);
 
-        return () => window.removeEventListener('scroll', debouncedScroll);
+        return () => window.removeEventListener("scroll", debouncedScroll);
     }, [dispatch, isLoading, hasMore, page, selectedCategory, scrollThreshold, isFetching]);
 
     if (error) {
@@ -101,8 +101,8 @@ export const Catalog = () => {
             <h1>Catalog</h1>
 
             <div className={styles.sort__buttons}>
-                <Button type={sortOrder === 'asc' ? 'primary' : 'default'} onClick={() => handleSort('asc')}>Sort by Price: Low to High</Button>
-                <Button type={sortOrder === 'desc' ? 'primary' : 'default'} onClick={() => handleSort('desc')}>Sort by Price: High to Low</Button>
+                <Button type={sortOrder === "asc" ? "primary" : "default"} onClick={() => handleSort("asc")}>Sort by Price: Low to High</Button>
+                <Button type={sortOrder === "desc" ? "primary" : "default"} onClick={() => handleSort("desc")}>Sort by Price: High to Low</Button>
             </div>
 
             <div className={styles.filter}>
@@ -110,7 +110,7 @@ export const Catalog = () => {
                 <Select
                     id="category"
                     style={{ width: 200 }}
-                    value={selectedCategory || ''}
+                    value={selectedCategory || ""}
                     onChange={handleCategoryChange}
                 >
                     {catalogSelectOptions.map((option) => (
@@ -134,7 +134,7 @@ export const Catalog = () => {
                         {favoriteIds.includes(product.id) ? (
                             <HeartFilled
                                 onClick={(e) => handleToggleFavorite(product.id, e)}
-                                style={{ color: 'red' }}
+                                style={{ color: "red" }}
                             />
                         ) : (
                             <HeartOutlined
@@ -146,7 +146,7 @@ export const Catalog = () => {
             </div>
 
             {isLoading && <Loader />}
-            {(!hasMore && !isLoading) && <div style={{ margin: '20px' }}>No more products</div>}
+            {(!hasMore && !isLoading) && <div style={{ margin: "20px" }}>No more products</div>}
         </div>
     );
 };

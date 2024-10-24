@@ -1,10 +1,10 @@
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
-import { IProduct } from '@/entities/product/models/productTypes';
-import { fetchProductById } from '@/entities/product/api/fetchProductById';
-import { Flex } from 'antd';
-import { Loader } from '@/shared/ui/Loader/Loader';
-import Image from 'next/image';
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { IProduct } from "@/entities/product/models/productTypes";
+import { fetchProductById } from "@/entities/product/api/fetchProductById";
+import { Flex } from "antd";
+import { Loader } from "@/shared/ui/Loader/Loader";
+import Image from "next/image";
 
 const ProductDetail = () => {
     const router = useRouter();
@@ -20,7 +20,7 @@ const ProductDetail = () => {
                     const fetchedProduct = await fetchProductById(id as string);
                     setProduct(fetchedProduct);
                 } catch (err: any) {
-                    setError('Failed to fetch product details.');
+                    setError("Failed to fetch product details.");
                 } finally {
                     setIsLoading(false);
                 }
@@ -42,8 +42,8 @@ const ProductDetail = () => {
     }
 
     return (
-        <div style={{ backgroundColor: '#d1feff', height: '100%' }}>
-            <Flex vertical align='center'>
+        <div style={{ backgroundColor: "#d1feff", height: "100%" }}>
+            <Flex vertical align="center">
                 <h1>{product.title}</h1>
                 <Image src={product.image} alt={product.title} width={200} height={200} />
                 <p>{product.description}</p>

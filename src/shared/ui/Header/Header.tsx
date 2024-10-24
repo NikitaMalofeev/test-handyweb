@@ -1,15 +1,15 @@
-import { Input } from 'antd';
-import { useState, useCallback, useEffect, useRef } from 'react';
-import { RootState, useAppDispatch, useAppSelector } from '@/app/store/store';
-import { fetchSearchProducts } from '@/entities/catalog/slice/catalogSlice';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { motion } from 'framer-motion';
-import styles from './styles.module.scss';
-import { searchDebounce } from '@/shared/helpers/searchDebounce';
-import HeartOutlined from '@ant-design/icons/lib/icons/HeartOutlined';
-import ArrowLeftOutlined from '@ant-design/icons/lib/icons/ArrowLeftOutlined';
-import Image from 'next/image';
+import { Input } from "antd";
+import { useState, useCallback, useEffect, useRef } from "react";
+import { RootState, useAppDispatch, useAppSelector } from "@/app/store/store";
+import { fetchSearchProducts } from "@/entities/catalog/slice/catalogSlice";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { motion } from "framer-motion";
+import styles from "./styles.module.scss";
+import { searchDebounce } from "@/shared/helpers/searchDebounce";
+import HeartOutlined from "@ant-design/icons/lib/icons/HeartOutlined";
+import ArrowLeftOutlined from "@ant-design/icons/lib/icons/ArrowLeftOutlined";
+import Image from "next/image";
 
 const { Search } = Input;
 
@@ -17,7 +17,7 @@ export const Header = () => {
     const dispatch = useAppDispatch();
     const router = useRouter();
     const { searchingProducts } = useAppSelector((state: RootState) => state.catalog);
-    const [searchQuery, setSearchQuery] = useState('');
+    const [searchQuery, setSearchQuery] = useState("");
     const [showResults, setShowResults] = useState(false);
     const searchResultRef = useRef<HTMLDivElement>(null);
 
@@ -55,13 +55,13 @@ export const Header = () => {
             }
         };
 
-        document.addEventListener('mousedown', handleClickOutside);
+        document.addEventListener("mousedown", handleClickOutside);
         return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
+            document.removeEventListener("mousedown", handleClickOutside);
         };
     }, [searchResultRef]);
 
-    const isNoFavoritePage = router.pathname !== '/favorite-page'
+    const isNoFavoritePage = router.pathname !== "/favorite-page"
 
     return (
         <div className={styles.header}>
@@ -75,13 +75,13 @@ export const Header = () => {
             />
 
             {isNoFavoritePage ? (
-                <Link href="/favorite-page" style={{ textDecoration: 'none', color: 'black', display: 'flex', gap: '8px' }}>
+                <Link href="/favorite-page" style={{ textDecoration: "none", color: "black", display: "flex", gap: "8px" }}>
                     <span>Favorites</span>
                     <HeartOutlined />
                 </Link>
             ) : (
 
-                <Link href="/" style={{ textDecoration: 'none', color: 'black', display: 'flex', gap: '8px' }}>
+                <Link href="/" style={{ textDecoration: "none", color: "black", display: "flex", gap: "8px" }}>
                     <ArrowLeftOutlined />
                     <span>Back to Catalog</span>
                 </Link>
@@ -91,7 +91,7 @@ export const Header = () => {
                 className={styles.search__results}
                 ref={searchResultRef}
                 initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: showResults ? 1 : 0, height: showResults ? 'auto' : 0 }}
+                animate={{ opacity: showResults ? 1 : 0, height: showResults ? "auto" : 0 }}
                 transition={{ duration: 0.3 }}
             >
                 {searchQuery && showResults && (
