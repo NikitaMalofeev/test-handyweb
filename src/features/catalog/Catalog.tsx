@@ -53,8 +53,9 @@ export const Catalog = () => {
     useEffect(() => {
         const handleScroll = () => {
             if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 500 && !isLoading && hasMore) {
+                const nextPage = page + 1;
                 dispatch(incrementPage());
-                dispatch(fetchProducts(page + 1, limit, selectedCategory || ''));
+                dispatch(fetchProducts(nextPage, limit, selectedCategory || ''));
             }
         };
 
@@ -116,5 +117,3 @@ export const Catalog = () => {
         </div>
     );
 };
-
-

@@ -29,7 +29,6 @@ const catalogSlice = createSlice({
         setSortOrder: (state, action: PayloadAction<'asc' | 'desc'>) => {
             state.sortOrder = action.payload;
         },
-
         setCategory: (state, action: PayloadAction<string>) => {
             state.selectedCategory = action.payload;
             state.page = 1;
@@ -39,11 +38,7 @@ const catalogSlice = createSlice({
             state.isLoading = action.payload;
         },
         setProducts: (state, action: PayloadAction<IProduct[]>) => {
-            if (state.page === 1) {
-                state.products = action.payload;
-            } else {
-                state.products = [...state.products, ...action.payload];
-            }
+            state.products = [...state.products, ...action.payload];
             state.hasMore = action.payload.length > 0;
             state.isLoading = false;
         },
@@ -59,13 +54,20 @@ const catalogSlice = createSlice({
 export const { setSortOrder, setCategory, setLoading, setProducts, setError, incrementPage } = catalogSlice.actions;
 export default catalogSlice.reducer;
 
-export const fetchProducts = (page: number, limit: number, category: string) => async (dispatch: any) => {
+export const fetchProducts = (page: number, limit: number, category: string) => async (dispatch: any, getState: any) => {
     dispatch(setLoading(true));
     try {
-        const products = await fetchProductsFromAPI(page, limit, category);
-        dispatch(setProducts(products));
+        const effectiveLimit = page * limit;
+        const products = await fetchProductsFromAPI(1, effectiveLimit, category);
+        const existingProducts = getState().catalog.products;
+        const newProducts = products.filter(
+            (newProduct: IProduct) => !existingProducts.some(
+                (existingProduct: IProduct) => existingProduct.id === newProduct.id
+            )
+        );
+        dispatch(setProducts(newProducts));
     } catch (error) {
-        dispatch(setError('error'));
+        dispatch(setError('Failed to fetch products'));
     }
     dispatch(setLoading(false));
 };
