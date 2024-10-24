@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { RootState, useAppDispatch, useAppSelector } from '@/app/store/store';
-import { fetchProducts, setCategory, setSortOrder, incrementPage, setProducts } from '@/entities/catalog/slice/catalogSlice';
+import { fetchProducts, setCategory, setSortOrder, incrementPage } from '@/entities/catalog/slice/catalogSlice';
 import styles from './catalog.module.scss';
 import { useRouter } from 'next/router';
 import { addFavorite, removeFavorite } from '@/entities/favorite/slice/favoriteSlice';
@@ -18,6 +18,8 @@ export const Catalog = () => {
     const { favoriteIds } = useAppSelector((state: RootState) => state.favorites);
 
     const limit = 6;
+    const [scrollThreshold, setScrollThreshold] = useState<number>(1500);
+    const [isFetching, setIsFetching] = useState(false);
 
     const handleSort = (order: 'asc' | 'desc') => {
         dispatch(setSortOrder(order));
@@ -55,17 +57,39 @@ export const Catalog = () => {
 
     useEffect(() => {
         const handleScroll = () => {
-            if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 500 && !isLoading && hasMore) {
+            const currentScrollY = window.scrollY + window.innerHeight;
+            const productContainer = document.querySelector(`.${styles.products}`);
+            const productsHeight = productContainer ? productContainer.scrollHeight : 0;
+
+            if (!isFetching && ((scrollThreshold && currentScrollY >= scrollThreshold) ||
+                (productContainer && currentScrollY >= productsHeight && !isLoading && hasMore))) {
+
+                setIsFetching(true);
+
                 const nextPage = page + 1;
                 dispatch(incrementPage());
-                dispatch(fetchProducts(nextPage, limit, selectedCategory || ''));
+                dispatch(fetchProducts(nextPage, limit, selectedCategory || '')).then(() => {
+                    setIsFetching(false);
+                });
+
+                setScrollThreshold((prevThreshold) => prevThreshold + 1500);
             }
         };
 
-        window.addEventListener('scroll', handleScroll);
+        const debounceScroll = () => {
+            let timeout: NodeJS.Timeout;
+            return () => {
+                clearTimeout(timeout);
+                timeout = setTimeout(handleScroll, 100);
+            };
+        };
 
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, [dispatch, isLoading, hasMore, page, selectedCategory]);
+        const debouncedScroll = debounceScroll();
+
+        window.addEventListener('scroll', debouncedScroll);
+
+        return () => window.removeEventListener('scroll', debouncedScroll);
+    }, [dispatch, isLoading, hasMore, page, selectedCategory, scrollThreshold, isFetching]);
 
     if (error) {
         return <div>Error: {error}</div>;
@@ -102,7 +126,6 @@ export const Catalog = () => {
                         key={`${product.id}-${page}-${index}`}
                         className={styles.products__card}
                         onClick={() => handleProductClick(product.id)}
-
                     >
                         <img src={product.image} alt={product.title} width={100} />
                         <h3>{product.title}</h3>
@@ -123,6 +146,6 @@ export const Catalog = () => {
 
             {isLoading && <Loader />}
             {(!hasMore && !isLoading) && <div style={{ margin: '20px' }}>No more products</div>}
-        </div >
+        </div>
     );
 };
